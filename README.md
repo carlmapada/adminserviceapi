@@ -16,15 +16,15 @@ This service supports:
 
   Component        Technology
   ---------------- -------------------------------
-  Language         Java 21
-  Framework        Spring Boot 3.4.x
-  Build Tool       Maven
-  Security         Spring Security + Cognito JWT
-  Database         PostgreSQL 15+
-  ORM              Hibernate / JPA
-  Cloud Services   AWS Cognito, AWS SES
-  Local Profile    Mock JWT + In-Memory SES
-
+  - **Language**:         Java 21
+  - **Framework**:        Spring Boot 3.4.x
+  - **Build Tool**:       Maven
+  - **Security**:         Spring Security + Cognito JWT
+  - **Database**:         PostgreSQL 15+
+  - **ORM**:              Hibernate / JPA
+  - **Cloud Services**:   AWS Cognito, AWS SES
+  - **Local Profile**:    Mock JWT + In-Memory SES
+ 
 ## 📁 Project Structure
 
     src/main/java/com/tropisure/adminserviceapi
