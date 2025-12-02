@@ -1,0 +1,4 @@
+spring:
+  profiles:
+    active: local   # <-- Switch to prod when deploying
+

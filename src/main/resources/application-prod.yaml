@@ -1,0 +1,26 @@
+spring:
+  profiles: prod
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tropisure
+    username: tropisure_app
+    password: Tropisure9$
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate.default_schema: admin
+
+aws:
+  cognito:
+    region: us-east-1
+    access-key: YOUR_AWS_ACCESS_KEY
+    secret-key: YOUR_AWS_SECRET_KEY
+    user-pool-id: your_user_pool_id
+
+  ses:
+    region: us-east-1
+
+jwt:
+  superadmin:
+    secret: CHANGE_THIS_SECRET

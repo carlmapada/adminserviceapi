@@ -1,4 +1,6 @@
 package com.tropisure.adminserviceapi.repository;
 
-public interface ReferenceMGARepository {
-}
+import com.tropisure.adminserviceapi.entity.ReferenceMGA;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ReferenceMGARepository extends JpaRepository<ReferenceMGA, Long> {}

@@ -1,4 +1,4 @@
-package com.tropisure.adminserviceapi.security;
+package com.tropisure.adminserviceapi.mocks;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

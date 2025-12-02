@@ -1,0 +1,34 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+  application:
+    name: admin-service-api
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tropisure
+    username: tropisure_app
+    password: Tropisure9$
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate.default_schema: admin_db
+
+
+# Disable AWS integrations
+aws:
+  cognito:
+    enabled: false
+    user-pool-id: dummy
+  ses:
+    enabled: false
+  region: us-east-1
+
+security:
+  mode: mock # <-- your own flag (choose any name)
+
+
+jwt:
+  superadmin:
+    secret: CHANGE_THIS_SECRET

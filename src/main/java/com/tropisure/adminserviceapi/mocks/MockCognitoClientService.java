@@ -1,5 +1,6 @@
-package com.tropisure.adminserviceapi.service;
+package com.tropisure.adminserviceapi.mocks;
 
+import com.tropisure.adminserviceapi.service.ICognitoClientService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 

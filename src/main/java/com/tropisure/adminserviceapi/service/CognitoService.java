@@ -1,41 +1,37 @@
 package com.tropisure.adminserviceapi.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
-import software.amazon.awssdk.services.cognitoidentityprovider.model.AdminAddUserToGroupRequest;
-import software.amazon.awssdk.services.cognitoidentityprovider.model.AdminCreateUserRequest;
-import software.amazon.awssdk.services.cognitoidentityprovider.model.AttributeType;
-import software.amazon.awssdk.services.cognitoidentityprovider.model.MessageActionType;
-
-import java.util.UUID;
+import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
+import software.amazon.awssdk.services.cognitoidentityprovider.model.*;
 
 @Service
+@Profile("prod")
 @RequiredArgsConstructor
-public class CognitoAdminService {
+public class CognitoService implements ICognitoClientService{
 
     private final CognitoIdentityProviderClient cognitoClient;
 
-    @Value("${aws.cognito.user-pool-id}")
-    private String userPoolId;
-
-    public void createUserWithRole(String email, String role) {
+    @Override
+    public void createUser(String userPoolId, String username, String email, String temporaryPassword, String group) {
         AdminCreateUserRequest request = AdminCreateUserRequest.builder()
                 .userPoolId(userPoolId)
-                .username(email)
-                .temporaryPassword(UUID.randomUUID().toString())
-                .userAttributes(AttributeType.builder().name("email").value(email).build())
+                .username(username)
+                .userAttributes(
+                        AttributeType.builder().name("email").value(email).build(),
+                        AttributeType.builder().name("email_verified").value("true").build()
+                )
+                .temporaryPassword(temporaryPassword)
                 .messageAction(MessageActionType.SUPPRESS)
                 .build();
-
         cognitoClient.adminCreateUser(request);
 
-        // Add user to group/role
+        // add to group
         cognitoClient.adminAddUserToGroup(AdminAddUserToGroupRequest.builder()
                 .userPoolId(userPoolId)
-                .username(email)
-                .groupName(role)
+                .username(username)
+                .groupName(group)
                 .build());
     }
 }
-

@@ -1,13 +1,15 @@
 package com.tropisure.adminserviceapi.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.ses.SesClient;
 import software.amazon.awssdk.services.ses.model.*;
 
 @Service
+@Profile("prod")
 @RequiredArgsConstructor
-public class NotificationService {
+public class SESNotificationService implements NotificationService{
 
     private final SesClient sesClient;
 
