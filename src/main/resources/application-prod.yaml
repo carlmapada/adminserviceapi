@@ -1,5 +1,9 @@
 spring:
-  profiles: prod
+  config:
+    activate:
+      on-profile: prod
+  application:
+    name: admin-service-api
   datasource:
     url: jdbc:postgresql://localhost:5432/tropisure
     username: tropisure_app
