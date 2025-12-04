@@ -28,6 +28,8 @@ aws:
 security:
   mode: mock # <-- your own flag (choose any name)
 
+server:
+  port: 8081
 
 jwt:
   superadmin:

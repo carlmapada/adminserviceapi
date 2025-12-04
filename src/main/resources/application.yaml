@@ -1,4 +1,4 @@
 spring:
   profiles:
-    active: local   # <-- Switch to prod when deploying
+    active: prod   # <-- Switch to prod when deploying
 
