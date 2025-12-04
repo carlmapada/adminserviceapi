@@ -7,6 +7,7 @@ import com.tropisure.adminserviceapi.entity.MGAProfile;
 import com.tropisure.adminserviceapi.repository.CarrierProfileRepository;
 import com.tropisure.adminserviceapi.repository.MGAProfileRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,14 +19,20 @@ public class AdminService {
 
     private final MGAProfileRepository mgaRepo;
     private final CarrierProfileRepository carrierRepo;
-//    private final CognitoService cognitoService;
     private final NotificationService notificationService;
     private final AuditLogService auditLogService;
     private final ICognitoClientService cognitoService;
 
-    private final String userPoolId = System.getenv("COGNITO_USER_POOL_ID");
+    @Value("${aws.cognito.user-pool-id}")
+    private String userPoolId;
 
     public MGAProfile createMGA(CreateMGARequest request, String performedBy) {
+
+        // Create Cognito user
+        String tempPassword = UUID.randomUUID().toString() + "Ab1!";
+        String username = request.getContactEmail().split("@")[0];
+        cognitoService.createUser(userPoolId, username, request.getContactEmail(), tempPassword, "MGA_ADMIN");
+
         MGAProfile mga = MGAProfile.builder()
                 .name(request.getName())
                 .taxId(request.getTaxId())
@@ -36,14 +43,12 @@ public class AdminService {
                 .build();
         mga = mgaRepo.save(mga);
 
-        // Create Cognito user
-        String tempPassword = UUID.randomUUID().toString() + "Ab1!";
-        cognitoService.createUser(userPoolId, request.getContactEmail(), request.getContactEmail(), tempPassword, "MGA_ADMIN");
+
 
         // Notify
-        notificationService.sendEmail(request.getContactEmail(),
-                "Tropisure MGA Account Created",
-                "Your MGA account has been created. Temporary password: " + tempPassword);
+//        notificationService.sendEmail(request.getContactEmail(),
+//                "Tropisure MGA Account Created",
+//                "Your MGA account has been created. Temporary password: " + tempPassword);
 
         // Audit log
         auditLogService.log("CREATE_MGA", mga.getName(), performedBy, mga.getId());
@@ -52,6 +57,15 @@ public class AdminService {
     }
 
     public CarrierProfile createCarrier(CreateCarrierRequest request, String performedBy) {
+
+        String tempPassword = UUID.randomUUID().toString() + "Ab1!";
+        String username = request.getContactEmail().split("@")[0];
+        cognitoService.createUser(userPoolId, username, request.getContactEmail(), tempPassword, "CARRIER_ADMIN");
+
+//        notificationService.sendEmail(request.getContactEmail(),
+//                "Tropisure Carrier Account Created",
+//                "Your Carrier account has been created. Temporary password: " + tempPassword);
+
         CarrierProfile carrier = CarrierProfile.builder()
                 .name(request.getName())
                 .naicCode(request.getNaicCode())
@@ -60,14 +74,6 @@ public class AdminService {
                 .createdAt(LocalDateTime.now())
                 .build();
         carrier = carrierRepo.save(carrier);
-
-        String tempPassword = UUID.randomUUID().toString() + "Ab1!";
-        cognitoService.createUser(userPoolId, request.getContactEmail(), request.getContactEmail(), tempPassword, "CARRIER_ADMIN");
-
-        notificationService.sendEmail(request.getContactEmail(),
-                "Tropisure Carrier Account Created",
-                "Your Carrier account has been created. Temporary password: " + tempPassword);
-
         auditLogService.log("CREATE_CARRIER", carrier.getName(), performedBy, carrier.getId());
 
         return carrier;

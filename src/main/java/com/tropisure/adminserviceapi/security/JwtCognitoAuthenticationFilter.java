@@ -31,7 +31,7 @@ public class JwtCognitoAuthenticationFilter implements Filter {
     @Value("${aws.cognito.user-pool-id}")
     private String userPoolId;
 
-    @Value("${aws.region}")
+    @Value("${aws.cognito.region}")
     private String region;
 
     private volatile Map<String, RSAKey> publicKeys = new HashMap<>();
