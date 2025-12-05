@@ -28,6 +28,9 @@ public class AdminService {
 
     public MGAProfile createMGA(CreateMGARequest request, String performedBy) {
 
+        if (mgaRepo.findByContactEmail(request.getContactEmail()).isPresent()) {
+            throw new IllegalArgumentException("MGA contact email already registered");
+        }
         // Create Cognito user
         String tempPassword = UUID.randomUUID().toString() + "Ab1!";
         String cognitoSub = cognitoService.createUser(userPoolId, request.getContactEmail(), request.getContactEmail(), tempPassword, "MGA_ADMIN");
@@ -58,6 +61,9 @@ public class AdminService {
 
     public CarrierProfile createCarrier(CreateCarrierRequest request, String performedBy) {
 
+        if (carrierRepo.findByContactEmail(request.getContactEmail()).isPresent()) {
+            throw new IllegalArgumentException("Carrier contact email already registered");
+        }
         String tempPassword = UUID.randomUUID().toString() + "Ab1!";
         String cognitoSub = cognitoService.createUser(userPoolId, request.getContactEmail(), request.getContactEmail(), tempPassword, "CARRIER_ADMIN");
 
