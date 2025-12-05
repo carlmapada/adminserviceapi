@@ -20,6 +20,9 @@ public class MGAProfile {
     @GeneratedValue
     private UUID id;
 
+    @Column(name = "cognito_sub", unique = true)
+    private String cognitoSub;
+
     private String name;
     private String taxId;
     private String address;

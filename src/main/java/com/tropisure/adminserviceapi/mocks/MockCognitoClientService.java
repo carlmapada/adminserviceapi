@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
 public class MockCognitoClientService implements ICognitoClientService {
 
     @Override
-    public void createUser(String userPoolId, String username, String email, String temporaryPassword, String group) {
+    public String createUser(String userPoolId, String username, String email, String temporaryPassword, String group) {
         System.out.println("Mock Cognito create user: " + username + " with role " + group);
+        return "xxxxx-sub";
     }
 }

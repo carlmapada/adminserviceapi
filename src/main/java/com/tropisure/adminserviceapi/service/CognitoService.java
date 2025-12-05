@@ -14,7 +14,7 @@ public class CognitoService implements ICognitoClientService{
     private final CognitoIdentityProviderClient cognitoClient;
 
     @Override
-    public void createUser(String userPoolId, String username, String email, String temporaryPassword, String group) {
+    public String createUser(String userPoolId, String username, String email, String temporaryPassword, String group) {
         AdminCreateUserRequest request = AdminCreateUserRequest.builder()
                 .userPoolId(userPoolId)
                 .username(username)
@@ -25,7 +25,8 @@ public class CognitoService implements ICognitoClientService{
                 .temporaryPassword(temporaryPassword)
                 .messageAction(MessageActionType.SUPPRESS)
                 .build();
-        cognitoClient.adminCreateUser(request);
+        AdminCreateUserResponse createUserResponse = cognitoClient.adminCreateUser(request);
+        String cognitoSub = createUserResponse.user().username(); // This is the sub
 
         // add to group
         cognitoClient.adminAddUserToGroup(AdminAddUserToGroupRequest.builder()
@@ -33,5 +34,7 @@ public class CognitoService implements ICognitoClientService{
                 .username(username)
                 .groupName(group)
                 .build());
+
+        return cognitoSub;
     }
 }

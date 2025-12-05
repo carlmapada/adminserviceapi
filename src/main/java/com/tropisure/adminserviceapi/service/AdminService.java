@@ -30,8 +30,7 @@ public class AdminService {
 
         // Create Cognito user
         String tempPassword = UUID.randomUUID().toString() + "Ab1!";
-        String username = request.getContactEmail().split("@")[0];
-        cognitoService.createUser(userPoolId, username, request.getContactEmail(), tempPassword, "MGA_ADMIN");
+        String cognitoSub = cognitoService.createUser(userPoolId, request.getContactEmail(), request.getContactEmail(), tempPassword, "MGA_ADMIN");
 
         MGAProfile mga = MGAProfile.builder()
                 .name(request.getName())
@@ -40,11 +39,12 @@ public class AdminService {
                 .contactName(request.getContactName())
                 .contactEmail(request.getContactEmail())
                 .createdAt(LocalDateTime.now())
+                .cognitoSub(cognitoSub)
                 .build();
         mga = mgaRepo.save(mga);
 
 
-
+        System.out.println("MGA Temp password: " + tempPassword);
         // Notify
 //        notificationService.sendEmail(request.getContactEmail(),
 //                "Tropisure MGA Account Created",
@@ -59,8 +59,7 @@ public class AdminService {
     public CarrierProfile createCarrier(CreateCarrierRequest request, String performedBy) {
 
         String tempPassword = UUID.randomUUID().toString() + "Ab1!";
-        String username = request.getContactEmail().split("@")[0];
-        cognitoService.createUser(userPoolId, username, request.getContactEmail(), tempPassword, "CARRIER_ADMIN");
+        String cognitoSub = cognitoService.createUser(userPoolId, request.getContactEmail(), request.getContactEmail(), tempPassword, "CARRIER_ADMIN");
 
 //        notificationService.sendEmail(request.getContactEmail(),
 //                "Tropisure Carrier Account Created",
@@ -72,8 +71,10 @@ public class AdminService {
                 .country(request.getCountry())
                 .contactEmail(request.getContactEmail())
                 .createdAt(LocalDateTime.now())
+                .cognitoSub(cognitoSub)
                 .build();
         carrier = carrierRepo.save(carrier);
+        System.out.println("Carrier Temp password: " + tempPassword);
         auditLogService.log("CREATE_CARRIER", carrier.getName(), performedBy, carrier.getId());
 
         return carrier;
